@@ -1,3 +1,6 @@
+let cart = JSON.parse(localStorage.getItem('cart')) || {};
+console.log('Data from Local Storage')
+
 var updateBtns = document.getElementsByClassName('update-cart')
 
 for (i = 0; i < updateBtns.length; i++) {
@@ -7,15 +10,18 @@ for (i = 0; i < updateBtns.length; i++) {
         console.log('productId:', productId, 'Action:', action)
 
         console.log('USER:', user)
-        if (user == 'AnonymousUser') {
-            console.log('User is not authenticated')
+        if (user === 'AnonymousUser') {
+            console.log('User is not authenticated --------')
+            console.log(productId, action)
+            addCookieItem(productId, action)
+            console.log("Passes this Test")
         } else {
-            updateUserorder(productId, action)
+            updateUserOrder(productId, action)
         }
     })
 }
 
-function updateUserorder(productId, action) {
+function updateUserOrder(productId, action) {
     console.log('User is authenticated, sending data...')
 
     var url = '/update_item/'
@@ -35,4 +41,35 @@ function updateUserorder(productId, action) {
             console.log('Data:', data)
             location.reload()
         });
+}
+function addCookieItem(productId, action){
+	console.log('User is not authenticated', productId, action)
+
+    // if (typeof cart === 'undefined') {
+    //     cart = {};
+    // }
+
+	if (action === 'add'){
+		if (cart[productId] === undefined){
+		cart[productId] = {'quantity':1}
+
+		}else{
+			cart[productId]['quantity'] += 1
+		}
+	}
+
+	if (action === 'remove'){
+		cart[productId]['quantity'] -= 1
+
+		if (cart[productId]['quantity'] <= 0){
+			console.log('Item should be deleted')
+			delete cart[productId];
+		}
+	}
+	console.log('CART:', cart)
+	// document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    document.cookie = `cart=${JSON.stringify(cart)};path=/`;
+	location.reload()
 }
