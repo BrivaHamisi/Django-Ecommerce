@@ -1,4 +1,3 @@
-let cart = JSON.parse(localStorage.getItem('cart')) || {};
 console.log('Data from Local Storage')
 
 var updateBtns = document.getElementsByClassName('update-cart')
@@ -42,34 +41,83 @@ function updateUserOrder(productId, action) {
             location.reload()
         });
 }
-function addCookieItem(productId, action){
-	console.log('User is not authenticated', productId, action)
 
-    // if (typeof cart === 'undefined') {
-    //     cart = {};
+function addCookieItem(productId, action) {
+    console.log('User is not authenticated', productId, action);
+
+    var cart = JSON.parse(localStorage.getItem('cart')) || {}; // Initialize cart
+
+    if (action === 'add') {
+        if (cart[productId] === undefined) {
+            cart[productId] = {'quantity': 1};
+        } else {
+            cart[productId]['quantity'] += 1;
+        }
+    }
+
+    if (action === 'remove') {
+        if (cart[productId] && cart[productId]['quantity'] > 0) {
+            cart[productId]['quantity'] -= 1;
+
+            if (cart[productId]['quantity'] <= 0) {
+                console.log('Item should be deleted');
+                delete cart[productId];
+            }
+        } else {
+            console.log('Cannot remove item, it does not exist in the cart');
+        }
+    }
+
+
+    // if (action === 'remove') {
+    //     if (cart[productId] && cart[productId]['quantity'] > 0) {
+    //         cart[productId]['quantity'] -= 1;
+    //
+    //         if (cart[productId]['quantity'] <= 0) {
+    //             console.log('Item should be deleted');
+    //             delete cart[productId];
+    //         }
+    //     } else {
+    //         console.log('Cannot remove item, it does not exist in the cart');
+    //     }
     // }
 
-	if (action === 'add'){
-		if (cart[productId] === undefined){
-		cart[productId] = {'quantity':1}
-
-		}else{
-			cart[productId]['quantity'] += 1
-		}
-	}
-
-	if (action === 'remove'){
-		cart[productId]['quantity'] -= 1
-
-		if (cart[productId]['quantity'] <= 0){
-			console.log('Item should be deleted')
-			delete cart[productId];
-		}
-	}
-	console.log('CART:', cart)
-	// document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-
+    console.log('CART:', cart);
     localStorage.setItem('cart', JSON.stringify(cart));
     document.cookie = `cart=${JSON.stringify(cart)};path=/`;
-	location.reload()
+    location.reload();
 }
+
+
+//
+// function addCookieItem(productId, action) {
+//     console.log('User is not authenticated', productId, action)
+//
+//     // if (typeof cart === 'undefined') {
+//     //     cart = {};
+//     // }
+//
+//     if (action === 'add') {
+//         if (cart[productId] === undefined) {
+//             cart[productId] = {'quantity': 1}
+//
+//         } else {
+//             cart[productId]['quantity'] += 1
+//         }
+//     }
+//
+//     if (action === 'remove') {
+//         cart[productId]['quantity'] -= 1
+//
+//         if (cart[productId]['quantity'] <= 0) {
+//             console.log('Item should be deleted')
+//             delete cart[productId];
+//         }
+//     }
+//     console.log('CART:', cart)
+//     document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+//
+//     // localStorage.setItem('cart', JSON.stringify(cart));
+//     // document.cookie = `cart=${JSON.stringify(cart)};path=/`;
+//     location.reload()
+// }
