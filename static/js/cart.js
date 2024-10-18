@@ -68,56 +68,8 @@ function addCookieItem(productId, action) {
         }
     }
 
-
-    // if (action === 'remove') {
-    //     if (cart[productId] && cart[productId]['quantity'] > 0) {
-    //         cart[productId]['quantity'] -= 1;
-    //
-    //         if (cart[productId]['quantity'] <= 0) {
-    //             console.log('Item should be deleted');
-    //             delete cart[productId];
-    //         }
-    //     } else {
-    //         console.log('Cannot remove item, it does not exist in the cart');
-    //     }
-    // }
-
     console.log('CART:', cart);
     localStorage.setItem('cart', JSON.stringify(cart));
     document.cookie = `cart=${JSON.stringify(cart)};path=/`;
     location.reload();
 }
-
-
-//
-// function addCookieItem(productId, action) {
-//     console.log('User is not authenticated', productId, action)
-//
-//     // if (typeof cart === 'undefined') {
-//     //     cart = {};
-//     // }
-//
-//     if (action === 'add') {
-//         if (cart[productId] === undefined) {
-//             cart[productId] = {'quantity': 1}
-//
-//         } else {
-//             cart[productId]['quantity'] += 1
-//         }
-//     }
-//
-//     if (action === 'remove') {
-//         cart[productId]['quantity'] -= 1
-//
-//         if (cart[productId]['quantity'] <= 0) {
-//             console.log('Item should be deleted')
-//             delete cart[productId];
-//         }
-//     }
-//     console.log('CART:', cart)
-//     document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-//
-//     // localStorage.setItem('cart', JSON.stringify(cart));
-//     // document.cookie = `cart=${JSON.stringify(cart)};path=/`;
-//     location.reload()
-// }
